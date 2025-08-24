@@ -3,6 +3,7 @@ import { currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import CreateTransactionDialogBox from "./_components/create-transaction-dialogbox";
 import { Button } from "@/components/ui/button";
+import Overview from "./_components/overview";
 
 const DashboardPage = async () => {
   const user = await currentUser();
@@ -50,6 +51,7 @@ const DashboardPage = async () => {
           </div>
         </div>
       </div>
+      <Overview userSettings={userSettings} />
     </div>
   );
 };
