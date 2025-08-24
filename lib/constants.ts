@@ -17,3 +17,5 @@ export const currencies: Currency[] = [
   { value: "EUR", label: "€, Euro", locale: "de-DE" },
   { value: "JPY", label: "¥, Japanese Yen", locale: "ja-JP" },
 ];
+
+export const MAX_DATE_RANGE_DAYS = 90;
