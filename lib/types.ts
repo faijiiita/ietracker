@@ -4,3 +4,5 @@ export type Timezone = {
   tzCode: string;
   utc: string;
 };
+
+export type TransactionType = "income" | "expense";
