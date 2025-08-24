@@ -12,7 +12,7 @@ import {
   CreateTransactionSchema,
   CreateTransactionSchemaType,
 } from "@/schema/transaction";
-import { ReactNode, useState } from "react";
+import { ReactNode, useCallback, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { cn } from "@/lib/utils";
@@ -25,6 +25,7 @@ import {
   FormLabel,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import CategoryPicker from "./category-picker";
 
 const CreateTransactionDialogBox = ({
   trigger,
@@ -45,6 +46,13 @@ const CreateTransactionDialogBox = ({
       date: undefined,
     },
   });
+
+  const handleCategoryChange = useCallback(
+    (value: string) => {
+      form.setValue("category", value);
+    },
+    [form]
+  );
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -94,6 +102,24 @@ const CreateTransactionDialogBox = ({
                 </FormItem>
               )}
             />
+            <div className="flex items-center justify-between gap-2">
+              <FormField
+                control={form.control}
+                name="category"
+                render={() => (
+                  <FormItem className="flex flex-col">
+                    <FormLabel>Category</FormLabel>
+                    <FormControl>
+                      <CategoryPicker
+                        type={type}
+                        onChange={handleCategoryChange}
+                      />
+                    </FormControl>
+                    <FormDescription>Select a Category</FormDescription>
+                  </FormItem>
+                )}
+              />
+            </div>
           </form>
         </Form>
       </DialogContent>

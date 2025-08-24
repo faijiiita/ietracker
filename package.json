@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@clerk/nextjs": "^6.31.2",
+    "@ferrucc-io/emoji-picker": "^0.0.45",
     "@hookform/resolvers": "^5.2.1",
     "@prisma/client": "^6.14.0",
     "@prisma/extension-accelerate": "^2.0.2",
