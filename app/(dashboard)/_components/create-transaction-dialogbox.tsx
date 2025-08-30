@@ -87,7 +87,7 @@ const CreateTransactionDialogBox = ({
       });
 
       queryClient.invalidateQueries({
-        queryKey: ["transactions"],
+        queryKey: ["overview"],
       });
 
       setOpen((prev) => !prev);
