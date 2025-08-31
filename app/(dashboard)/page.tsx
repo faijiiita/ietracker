@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import CreateTransactionDialogBox from "./_components/create-transaction-dialogbox";
 import { Button } from "@/components/ui/button";
 import Overview from "./_components/overview";
+import History from "./_components/history";
 
 const DashboardPage = async () => {
   const user = await currentUser();
@@ -52,6 +53,7 @@ const DashboardPage = async () => {
         </div>
       </div>
       <Overview userSettings={userSettings} />
+      <History userSettings={userSettings} />
     </div>
   );
 };

@@ -1,5 +1,7 @@
 import prisma from "@/lib/prisma";
 import { currencies } from "@/lib/constants";
+import { HistoryData, Period, Timeframe } from "@/lib/types";
+import { getDaysInMonth } from "date-fns";
 
 export const getBalanceStats = async (userId: string, from: Date, to: Date) => {
   const totals = await prisma.transaction.groupBy({
@@ -88,4 +90,123 @@ export const getCategoriesStats = async (
   });
 
   return stats;
+};
+
+export const getHistoryPeriods = async (userId: string) => {
+  const result = await prisma.monthHistory.findMany({
+    where: {
+      userId,
+    },
+    select: {
+      year: true,
+    },
+    distinct: ["year"],
+    orderBy: [
+      {
+        year: "asc",
+      },
+    ],
+  });
+
+  const years = result.map((el) => el.year);
+  if (years.length === 0) {
+    return [new Date().getFullYear()];
+  }
+
+  return years;
+};
+
+const getYearHistoryData = async (userId: string, year: number) => {
+  const result = await prisma.yearHistory.groupBy({
+    by: ["month"],
+    where: {
+      userId,
+      year,
+    },
+    _sum: {
+      expense: true,
+      income: true,
+    },
+    orderBy: [
+      {
+        month: "asc",
+      },
+    ],
+  });
+
+  if (!result || result.length === 0) return [];
+
+  const historyData: HistoryData[] = [];
+
+  for (let i = 1; i <= 12; i++) {
+    let expense = 0;
+    let income = 0;
+
+    const month = result.find((row) => row.month === i);
+    if (month) {
+      expense = month._sum.expense || 0;
+      income = month._sum.income || 0;
+    }
+
+    historyData.push({ year, month: i - 1, income, expense });
+  }
+
+  return historyData;
+};
+
+const getMonthHistoryData = async (
+  userId: string,
+  year: number,
+  month: number
+) => {
+  const result = await prisma.monthHistory.groupBy({
+    by: ["day"],
+    where: {
+      userId,
+      year,
+      month,
+    },
+    _sum: {
+      income: true,
+      expense: true,
+    },
+    orderBy: [
+      {
+        day: "asc",
+      },
+    ],
+  });
+
+  if (!result || result.length === 0) return [];
+
+  const historyData: HistoryData[] = [];
+  const daysInMonth = getDaysInMonth(new Date(year, month - 1));
+
+  for (let i = 1; i <= daysInMonth; i++) {
+    let income = 0;
+    let expense = 0;
+
+    const day = result.find((row) => row.day === i);
+    if (day) {
+      income = day._sum.income || 0;
+      expense = day._sum.expense || 0;
+    }
+
+    historyData.push({ income, expense, year, month: month - 1, day: i });
+  }
+
+  return historyData;
+};
+
+export const getHisoryData = async (
+  userId: string,
+  timeframe: Timeframe,
+  period: Period
+) => {
+  switch (timeframe) {
+    case "year":
+      return await getYearHistoryData(userId, period.year);
+    case "month":
+      return await getMonthHistoryData(userId, period.year, period.month);
+  }
 };
