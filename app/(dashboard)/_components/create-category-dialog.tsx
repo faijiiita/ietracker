@@ -46,7 +46,7 @@ const CreateCategoryDialog = ({
 }: {
   type: TransactionType;
   successCallback: (category: Category) => void;
-  trigger: ReactNode;
+  trigger?: ReactNode;
 }) => {
   const [open, setOpen] = useState(false);
 
