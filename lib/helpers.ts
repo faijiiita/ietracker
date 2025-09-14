@@ -210,3 +210,38 @@ export const getHisoryData = async (
       return await getMonthHistoryData(userId, period.year, period.month);
   }
 };
+
+export const getTransactionsHistory = async (
+  userId: string,
+  from: Date,
+  to: Date
+) => {
+  const userSettings = await prisma.userSettings.findUnique({
+    where: {
+      userId,
+    },
+  });
+  if (!userSettings) {
+    throw new Error("User Settings not found");
+  }
+
+  const formatter = GetFormatterForCurrency(userSettings.currency);
+
+  const transactions = await prisma.transaction.findMany({
+    where: {
+      userId,
+      date: {
+        gte: from,
+        lte: to,
+      },
+    },
+    orderBy: {
+      date: "desc",
+    },
+  });
+
+  return transactions.map((transaction) => ({
+    ...transaction,
+    formattedAmount: formatter.format(transaction.amount),
+  }));
+};

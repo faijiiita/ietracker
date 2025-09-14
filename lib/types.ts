@@ -3,6 +3,7 @@ import {
   getCategoriesStats,
   getHisoryData,
   getHistoryPeriods,
+  getTransactionsHistory,
 } from "@/lib/helpers";
 
 export type Timezone = {
@@ -29,6 +30,12 @@ export type GetHistoryPeriodsResponseType = Awaited<
 export type GetHistoryDataResponseType = Awaited<
   ReturnType<typeof getHisoryData>
 >;
+
+export type GetTransactionsHistoryResponseType = Awaited<
+  ReturnType<typeof getTransactionsHistory>
+>;
+
+export type TransactionHistoryRowType = GetTransactionsHistoryResponseType[0];
 
 export type Timeframe = "month" | "year";
 export type Period = { year: number; month: number };
