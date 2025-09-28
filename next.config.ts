@@ -5,12 +5,12 @@ const nextConfig: NextConfig = {
   async headers() {
     return [
       {
-        source: "/api/:path*",
+        source: "/:path*",
         headers: [
           { key: "Access-Control-Allow-Credentials", value: "true" },
           {
             key: "Access-Control-Allow-Origin",
-            value: "*",
+            value: "https://ietracker.co.in",
           }, // replace this your actual origin
           {
             key: "Access-Control-Allow-Methods",
