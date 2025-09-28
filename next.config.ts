@@ -10,7 +10,7 @@ const nextConfig: NextConfig = {
           { key: "Access-Control-Allow-Credentials", value: "true" },
           {
             key: "Access-Control-Allow-Origin",
-            value: "https://ietracker.co.in",
+            value: "https://accounts.ietracker.co.in",
           }, // replace this your actual origin
           {
             key: "Access-Control-Allow-Methods",
