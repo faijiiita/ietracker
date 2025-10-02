@@ -50,7 +50,7 @@ export const CreateTransaction = async (form: CreateTransactionSchemaType) => {
       data: {
         userId: user.id,
         description: description || "",
-        date: date,
+        date: userTimezoneDate,
         userTimezone: userSettings.timezone,
         type,
         category: categoryRow.name,
