@@ -4,6 +4,9 @@ import { HistoryData, Period, Timeframe } from "@/lib/types";
 import { getDaysInMonth } from "date-fns";
 
 export const getBalanceStats = async (userId: string, from: Date, to: Date) => {
+  console.log(from);
+  console.log(to);
+
   const totals = await prisma.transaction.groupBy({
     by: ["type"],
     where: {
