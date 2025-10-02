@@ -4,15 +4,33 @@ import { HistoryData, Period, Timeframe } from "@/lib/types";
 import { getDaysInMonth } from "date-fns";
 
 export const getBalanceStats = async (userId: string, from: Date, to: Date) => {
-  console.log(from);
-  console.log(to);
+  const from_utc = new Date(
+    from.getUTCFullYear(),
+    from.getUTCMonth(),
+    from.getUTCDate(),
+    from.getUTCHours(),
+    from.getUTCMinutes(),
+    from.getUTCSeconds(),
+    from.getUTCMilliseconds()
+  );
+  const to_utc = new Date(
+    to.getUTCFullYear(),
+    to.getUTCMonth(),
+    to.getUTCDate(),
+    to.getUTCHours(),
+    to.getUTCMinutes(),
+    to.getUTCSeconds(),
+    to.getUTCMilliseconds()
+  );
+  console.log(from_utc);
+  console.log(to_utc);
 
   const totals = await prisma.transaction.groupBy({
     by: ["type"],
     where: {
       userId,
       date: {
-        gte: from,
+        gte: from_utc,
         // new Date(
         //   from.getUTCFullYear(),
         //   from.getUTCMonth(),
@@ -22,7 +40,7 @@ export const getBalanceStats = async (userId: string, from: Date, to: Date) => {
         //   from.getUTCSeconds(),
         //   from.getUTCMilliseconds()
         // ),
-        lte: to,
+        lte: to_utc,
         // new Date(
         //   to.getUTCFullYear(),
         //   to.getUTCMonth(),
