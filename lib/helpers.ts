@@ -4,52 +4,13 @@ import { HistoryData, Period, Timeframe } from "@/lib/types";
 import { getDaysInMonth } from "date-fns";
 
 export const getBalanceStats = async (userId: string, from: Date, to: Date) => {
-  const from_utc = new Date(
-    from.getUTCFullYear(),
-    from.getUTCMonth(),
-    from.getUTCDate(),
-    from.getUTCHours(),
-    from.getUTCMinutes(),
-    from.getUTCSeconds(),
-    from.getUTCMilliseconds()
-  );
-  const to_utc = new Date(
-    to.getUTCFullYear(),
-    to.getUTCMonth(),
-    to.getUTCDate(),
-    to.getUTCHours(),
-    to.getUTCMinutes(),
-    to.getUTCSeconds(),
-    to.getUTCMilliseconds()
-  );
-  console.log(from_utc);
-  console.log(to_utc);
-
   const totals = await prisma.transaction.groupBy({
     by: ["type"],
     where: {
       userId,
       date: {
-        gte: from_utc,
-        // new Date(
-        //   from.getUTCFullYear(),
-        //   from.getUTCMonth(),
-        //   from.getUTCDate(),
-        //   from.getUTCHours(),
-        //   from.getUTCMinutes(),
-        //   from.getUTCSeconds(),
-        //   from.getUTCMilliseconds()
-        // ),
-        lte: to_utc,
-        // new Date(
-        //   to.getUTCFullYear(),
-        //   to.getUTCMonth(),
-        //   to.getUTCDate(),
-        //   to.getUTCHours(),
-        //   to.getUTCMinutes(),
-        //   to.getUTCSeconds(),
-        //   to.getUTCMilliseconds()
-        // ),
+        gte: from,
+        lte: to,
       },
     },
     _sum: {
@@ -82,24 +43,8 @@ export const getCategoriesStats = async (
     where: {
       userId,
       date: {
-        gte: new Date(
-          from.getUTCFullYear(),
-          from.getUTCMonth(),
-          from.getUTCDate(),
-          from.getUTCHours(),
-          from.getUTCMinutes(),
-          from.getUTCSeconds(),
-          from.getUTCMilliseconds()
-        ),
-        lte: new Date(
-          to.getUTCFullYear(),
-          to.getUTCMonth(),
-          to.getUTCDate(),
-          to.getUTCHours(),
-          to.getUTCMinutes(),
-          to.getUTCSeconds(),
-          to.getUTCMilliseconds()
-        ),
+        gte: from,
+        lte: to,
       },
     },
     _sum: {
